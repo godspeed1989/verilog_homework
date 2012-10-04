@@ -1,4 +1,11 @@
-verilog_homework
+verilog homework
 ================
 
-graduate 1 verilog homework
+graduate 1 verilog homework<br/>
+
+1. 编写设计通过液晶显示器显示相应的数字或字母<br/>
+2. 4位减法、加法器设计<br/>
+	设计带借位、进位的4位二进制减法、加法器。<br/>
+	要求:要考虑借位、进位。在软件环境下,编写源文件,并用器件实现。<br/>
+
+
