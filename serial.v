@@ -19,7 +19,7 @@ begin
 		istream <= in[i];
 		i <= i - 1;
 	end else
-		$finish();
+		#2 $finish();
 end
 endmodule
 
