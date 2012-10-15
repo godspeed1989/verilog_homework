@@ -1,3 +1,5 @@
+`timescale 1ns / 1ns
+// test bench
 module add4c_tb();
 	reg [3:0] p1;
 	reg [3:0] p2;
@@ -11,37 +13,56 @@ initial begin
 end
 	addmin4c addmin(p1, p2, result, carry, type);
 initial begin
-	#3 p1 = 4'd1; p2 = 4'd2; type=1;
-	#3 p1 = 4'd9; p2 = 4'd8; type=0;
-	#3 p1 = 4'd5; p2 = 4'd7; type=1;
-	#3 p1 = 4'd5; p2 = 4'd7; type=0;
-	#3 p1 = 4'd15; p2 = 4'd6; type=1;
-	#10 $finish();
+	#0 p1 = 4'b0001; p2 = 4'b0001; type=1;
+	#3 p1 = 4'b0010; p2 = 4'b0011; type=1;
+	#3 p1 = 4'b1000; p2 = 4'b1111; type=1;
+	#3 p1 = 4'b1111; p2 = 4'b1111; type=1;
+	#3 p1 = 4'b0101; p2 = 4'b1010; type=1;
+	#3 p1 = 4'b0001; p2 = 4'b0001; type=0;
+	#3 p1 = 4'b0010; p2 = 4'b0011; type=0;
+	#3 p1 = 4'b1000; p2 = 4'b1111; type=0;
+	#3 p1 = 4'b1111; p2 = 4'b1111; type=0;
+	#3 p1 = 4'b0101; p2 = 4'b1010; type=0;
+	#3 $finish();
 end
 endmodule
-
-module addmin4c(p1, p2, result, c, type);
+/*
+ * 4 bit width adder/minus
+ */
+module addmin4c(p1, p2, result, carry, type);
 	input [3:0] p1;
 	input [3:0] p2;
 	input type;
 	output [3:0] result;
-	output c;
+	output carry;
 
-	reg [4:0] sum;
-	assign result[3:0] = sum[3:0];
-	assign c = sum[4];
+	wire c1, c2, c3;
+	add1bit a1(p1[0], p2[0],  0, result[0], c1, type);
+	add1bit a2(p1[1], p2[1], c1, result[1], c2, type);
+	add1bit a3(p1[2], p2[2], c2, result[2], c3, type);
+	add1bit a4(p1[3], p2[3], c3, result[3], carry, type);
+
+endmodule
+/*
+ * 1 bit width adder/minus, selected by 'type'
+ */
+module add1bit(o1, o2, carryb, out, carryf, type);
+	output carryf, out;
+	input o1, o2, carryb, type;
+	reg carryf, out;
 
 always @ (*)
 begin
 	if(type == 1'b1)
-		sum = p1 + p2;
-	else
-		if(p1 >= p2)
-			sum = p1 - p2;
-		else begin
-			sum = p2 - p1;
-			sum = sum | 5'b10000;
-		end
+	begin
+		out		<=	(o1 ^ o2) ^ carryb;
+		carryf	<=	(o1 & o2) | (o1 & carryb) | (o2 & carryb);
+	end else begin
+		out		<=	o1 ^ o2 ^ carryb;
+		/*carryf	<=	(~o1 & ~o2 & carryb) | (~o1 & o2 & ~carryb) | 
+					(~o1 & 	o2 & carryb) | ( o1 & o2 &  carryb);*/
+		carryf	<=	(~o1 & o2) | (carryb & o2) | (carryb & ~o1);
+	end
 end
-	
+
 endmodule
