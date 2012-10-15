@@ -1,8 +1,11 @@
-
+`timescale 1ns / 1ns
+/*
+ * test bench
+ */
 module multi3_tb();
 	reg [2:0] p1;
 	reg [2:0] p2;
-	wire [4:0] result;
+	wire [5:0] result;
 initial begin
 	$dumpfile("multi3.vcd");
 	$dumpvars();
@@ -11,23 +14,35 @@ initial begin
 end
 	multi3 mult(p1, p2, result);
 initial begin
-	#2 p1= 3'b11;	p2= 3'b10;
-	#2 p1=-3'b01;	p2= 3'b10;
-	#2 p1= 3'b10;	p2=-3'b10;
-	#2 p1=-3'b11;	p2= 3'b11;
-	#2 p1=-3'b11;	p2= 3'b00;
-	#5 $finish();
+	#0 p1 = 3'b111; p2 = 3'b000;
+	#2 p1 = 3'b001; p2 = 3'b001;
+	#2 p1 = 3'b010; p2 = 3'b010;
+	#2 p1 = 3'b100; p2 = 3'b011;
+	#2 p1 = 3'b110; p2 = 3'b100;
+	#2 $finish();
 end
 endmodule
-
+/*
+ * 3 bit multiplier
+ */
 module multi3(p1, p2, result);
-	input [2:0] p1; //最高位是符号位
+	input [2:0] p1;
 	input [2:0] p2;
-	output reg [4:0] result;
-
+	output reg [5:0] result;
+	reg [5:0] ret;
+	reg [5:0] pb;
+	integer i;
 always @ (*)
 begin
-	result = p1[1:0] * p2[1:0];
-	result[4] = p1[2] ^ p2[2];
+	ret = 6'b0;
+	pb = {3'b000, p2};
+	for(i=0; i<3; i=i+1)
+	begin
+		if (p1[i] == 1'b1)
+			ret = ret + pb;
+		pb = pb << 1;
+	end
+	result = ret;
 end
+
 endmodule

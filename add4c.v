@@ -1,5 +1,7 @@
 `timescale 1ns / 1ns
-// test bench
+/*
+ * test bench
+ */
 module add4c_tb();
 	reg [3:0] p1;
 	reg [3:0] p2;
@@ -59,8 +61,6 @@ begin
 		carryf	<=	(o1 & o2) | (o1 & carryb) | (o2 & carryb);
 	end else begin
 		out		<=	o1 ^ o2 ^ carryb;
-		/*carryf	<=	(~o1 & ~o2 & carryb) | (~o1 & o2 & ~carryb) | 
-					(~o1 & 	o2 & carryb) | ( o1 & o2 &  carryb);*/
 		carryf	<=	(~o1 & o2) | (carryb & o2) | (carryb & ~o1);
 	end
 end
