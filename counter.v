@@ -19,7 +19,9 @@ initial begin
 end
 	
 endmodule
-
+/*
+ * changable mode counter
+ */
 module counter(clk, mode, out, reset);
 	input clk, reset;
 	input [1:0] mode;
@@ -27,13 +29,15 @@ module counter(clk, mode, out, reset);
 	reg [3:0] max;
 initial out = 0;
 always @(*)
-	case (mode)
+begin
+case (mode)
 		2'b00: max = 4'd9;
 		2'b01: max = 4'd11;
 		2'b10: max = 4'd13;
 		2'b11: max = 4'd15;
 		default:;
 	endcase
+end
 always @ (posedge clk or negedge clk)
 begin
 	if(reset)

@@ -2,6 +2,7 @@
 /*
  * test bench
  */
+`define DEBUG
 module add4c_tb();
 	reg [3:0] p1;
 	reg [3:0] p2;
@@ -9,12 +10,15 @@ module add4c_tb();
 	wire [3:0] result;
 	wire carry;
 initial begin
+`ifdef DEBUG
 	$dumpfile("add4c.vcd");
 	$dumpvars();
+`endif
 	p1 = 0; p2 = 0; type = 0;
 end
 	addmin4c addmin(p1, p2, result, carry, type);
 initial begin
+`ifdef DEBUG
 	#0 p1 = 4'b0001; p2 = 4'b0001; type=1;
 	#3 p1 = 4'b0010; p2 = 4'b0011; type=1;
 	#3 p1 = 4'b1000; p2 = 4'b1111; type=1;
@@ -26,6 +30,7 @@ initial begin
 	#3 p1 = 4'b1111; p2 = 4'b1111; type=0;
 	#3 p1 = 4'b0101; p2 = 4'b1010; type=0;
 	#3 $finish();
+`endif
 end
 endmodule
 /*

@@ -2,17 +2,22 @@
 /*
  * test bench
  */
+//`define DEBUG
 module multi3_tb();
 	reg [2:0] p1;
 	reg [2:0] p2;
 	wire [5:0] result;
 initial begin
+`ifdef DEBUG
 	$dumpfile("multi3.vcd");
 	$dumpvars();
+`endif
 	p1 <= 0;
 	p2 <= 0;
 end
 	multi3 mult(p1, p2, result);
+
+`ifdef DEBUG
 initial begin
 	#0 p1 = 3'b111; p2 = 3'b000;
 	#2 p1 = 3'b001; p2 = 3'b001;
@@ -21,6 +26,8 @@ initial begin
 	#2 p1 = 3'b110; p2 = 3'b100;
 	#2 $finish();
 end
+`endif
+
 endmodule
 /*
  * 3 bit multiplier
