@@ -2,6 +2,7 @@
 /*
  * test bench
  */
+`define DEBUG
 module serial_tb();
 	reg clk, istream;
 	reg [16:0] in;
@@ -9,16 +10,21 @@ module serial_tb();
 	integer i;
 	parameter len = 16;
 initial begin
+`ifdef DEBUG
 	$dumpfile("serial.vcd");
 	$dumpvars();
+`endif
 	clk = 0;
 	in = 16'b1101111110101110;
 	istream = 0;
 	i = 0;
 end
-always #2 clk = ~clk;
+
 	serial Serial(istream, ostream, clk);
-always @ (posedge clk or negedge clk)
+
+`ifdef DEBUG
+always #2 clk = ~clk;
+always @ (clk)
 begin
 	if(i<len)
 	begin
@@ -27,6 +33,7 @@ begin
 	end else
 		#2 $finish();
 end
+`endif
 endmodule
 /*
  * serial detector
@@ -36,10 +43,9 @@ module serial(istream, ostream, clk);
 	output reg ostream;
 	reg [2:0] cnt;
 initial begin
-	cnt <= 0;
-	ostream <= 0;
+	ostream = 0;
 end
-always @ (posedge clk or negedge clk)
+always @ (clk)
 begin
 	if(istream == 1'b0)
 		cnt = 0;	
