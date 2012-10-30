@@ -58,6 +58,6 @@ begin
 		cnt = 3'b011;
 	end else
 		ostream = 1'b0;
-	$display("%d %b", cnt, ostream);
+	$display("%b %d %b", istream, cnt, ostream);
 end
 endmodule
