@@ -7,6 +7,7 @@ initial begin
 	$dumpvars();
 	clk = 0;
 	mode = 0;
+	reset = 0;
 end
 always #1 clk = ~clk;
 	counter Counter(clk, mode, out, reset);
@@ -43,7 +44,7 @@ begin
 	if(reset)
 		out = 0;
 	out = out + 1;
-	if(out == max)
+	if(out > max)
 		out = 0;
 end
 endmodule
