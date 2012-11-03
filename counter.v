@@ -42,11 +42,8 @@ always @ (posedge clk or negedge clk)
 begin
 	if(reset)
 		out = 0;
-	else
-	begin
-		out = out + 1;
-		if(out == max)
-			out = 0;
-	end
+	out = out + 1;
+	if(out == max)
+		out = 0;
 end
 endmodule
