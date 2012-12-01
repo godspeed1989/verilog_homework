@@ -63,7 +63,7 @@ begin
 		begin
 			if(counter == rcv_bit_per) begin
 				n_counter <= 0;
-				n_rcv_sr <= {RS232_DCE_RXD, rcv_sr[7:1]};
+				n_rcv_sr <= {~RS232_DCE_RXD, rcv_sr[7:1]};
 				n_data_bit_count <= data_bit_count + 1;
 				if(data_bit_count == 7) begin
 					rx_vld <= 1'b1;

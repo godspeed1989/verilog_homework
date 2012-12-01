@@ -20,9 +20,9 @@ RS232_RX #(.baud(9600), .mhz(50)) rx_232
 	.receive_data(rx_data)
 );
 
-reg tx_vld;
+wire tx_vld;
 wire [7:0] tx_data;
-//assign tx_vld = rx_vld;
+assign tx_vld = rx_vld;
 assign tx_data = rx_data;
 
 RS232_TX #(.baud(9600), .mhz(50)) tx_232
@@ -31,10 +31,11 @@ RS232_TX #(.baud(9600), .mhz(50)) tx_232
 	.reset(0),
 	.RS232_DCE_TXD(TX),
 	.tx_vld(tx_vld),
-	.transmit_data(8'b10010110),
+	.transmit_data(tx_data),
 	.tx_rdy(LEDG[8])
 );
 
+/*
 integer cnt;
 always @ (posedge CLK_50M)
 begin
@@ -47,18 +48,6 @@ begin
 	else
 		tx_vld <= 0;
 end
-
-/*
-rs232  
-RS232	(
-			.clk(CLK_50M),
-			.rst(0),
-			.rx(RX),			//input
-			.tx(TX),			//output
-			.rx_vld(rx_vld),	//output
-			.rx_data(rx_data),	//output
-			.tx_vld(tx_vld),	//input
-			.tx_data(tx_data)	//input
-		);*/
+*/
 
 endmodule
