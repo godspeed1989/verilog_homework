@@ -76,9 +76,9 @@ begin
 					n_state <= st_data_bits;
 			end
 			else begin
+				n_state <= st_data_bits;
 				n_counter <= counter + 1;
 				RS232_DCE_TXD <= ~tx_data[data_bit_count];
-				n_state <= st_data_bits;
 			end
 		end
 	st_stop_bit:
